@@ -1,0 +1,98 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/source-serif-4';
+import '~/styles/global.css';
+import '~/styles/landing.css';
+import GoogleTagManager from '~/components/GoogleTagManager.astro';
+import InquiryDock from '~/components/InquiryDock.astro';
+import { absoluteUrl, site, whatsappHref } from '~/lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  englishPath: string;
+  image?: string;
+  whatsappText?: string;
+  variant?: 'factory' | 'kit' | 'look';
+}
+
+const { title, description, englishPath, image = '/brand/logo.png', whatsappText = 'Hello Sheerherb, I need a private label creatine quote.', variant } = Astro.props;
+const canonical = absoluteUrl(englishPath);
+const imageUrl = image.startsWith('http') ? image : absoluteUrl(image);
+const year = new Date().getFullYear();
+const themeColor = variant === 'look' ? '#161616' : variant === 'kit' ? '#1a1714' : '#0f5c3c';
+---
+
+<!doctype html>
+<html lang="en" dir="ltr" style={variant ? 'scroll-padding-top: 4rem' : undefined}>
+  <head>
+    <GoogleTagManager location="head" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="noindex,follow" />
+    <meta name="theme-color" content={themeColor} />
+    <link rel="icon" type="image/png" sizes="32x32" href="/wp-content/uploads/2024/04/cropped-LOGO04-32x32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/wp-content/uploads/2024/04/cropped-LOGO04-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/wp-content/uploads/2024/04/cropped-LOGO04.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Sheerherb" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={imageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+  </head>
+  <body class={variant ? `land-v-${variant}` : 'land-index'}>
+    <GoogleTagManager location="body" />
+    <a class="skip" href="#main">Skip to content</a>
+    {!variant && (
+      <header class="land-top">
+        <div class="wrap">
+          <a class="logo" href="/" aria-label="Sheerherb">
+            <img src="/brand/logo.png" alt="" width="220" height="78" />
+          </a>
+        </div>
+      </header>
+    )}
+    <main id="main">
+      <slot />
+    </main>
+    <footer class="land-foot">
+      <div class="wrap">
+        <p>© {year} {site.legalName} · Xi’an, China</p>
+      </div>
+    </footer>
+    {variant && <InquiryDock lang="en" showQuote={false} />}
+    {variant && (
+      <div class="mobile-bar land-mobile">
+        {variant === 'factory' ? (
+          <a class="solid" href="#inquiry-form">Get a factory quote</a>
+        ) : (
+          <>
+            <a class="solid" href="#inquiry-form">Quote</a>
+            <button class="ghost" type="button" data-open-quote>Request a quote</button>
+          </>
+        )}
+      </div>
+    )}
+    <script>
+      document.addEventListener('click', (event) => {
+        const source = event.target instanceof Element ? event.target.closest('[data-pick]') : null;
+        if (!(source instanceof HTMLElement)) return;
+        const form = document.querySelector('#inquiry-form form');
+        if (!(form instanceof HTMLFormElement)) return;
+        const pick = source.dataset.pick || '';
+        const message = form.querySelector('textarea');
+        const product = form.querySelector('input[name="product"]');
+        if (message instanceof HTMLTextAreaElement) message.value = `Product: ${pick}\n`;
+        if (product instanceof HTMLInputElement) product.value = pick;
+      });
+    </script>
+  </body>
+</html>

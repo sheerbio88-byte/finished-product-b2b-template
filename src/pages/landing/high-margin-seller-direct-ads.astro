@@ -1,0 +1,166 @@
+---
+import LandingLayout from '~/layouts/LandingLayout.astro';
+import QuoteForm from '~/components/QuoteForm.astro';
+
+const rail = [
+  { name: 'Capsules', flag: 'Strongest', pick: 'Creatine monohydrate capsules', dosage: 'Capsules', image: '/wp-content/uploads/2024/03/OEM-Creatine-Monohydrate-Capsules-supplement.png', alt: 'Creatine capsules' },
+  { name: 'Jar', flag: 'Powder', pick: 'Creatine monohydrate powder, jar', dosage: 'Powder', image: '/wp-content/uploads/2026/05/Custom-Canned-Creatine.jpg', alt: 'Creatine jar' },
+  { name: 'Pouch', flag: 'Powder', pick: 'Creatine monohydrate powder, stand-up pouch', dosage: 'Powder', image: '/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg', alt: 'Creatine pouch' },
+  { name: 'Gummies', flag: 'Chew', pick: 'Creatine monohydrate gummies', dosage: 'Gummies', image: '/wp-content/uploads/2025/03/Creatine-Monohydrate-Gummy.jpg', alt: 'Creatine gummies' },
+  { name: 'Softgels', flag: 'Soft capsule', pick: 'Private-label softgels', dosage: 'Softgels', image: '/wp-content/uploads/2024/09/Private-Label-Astaxanthin-Softgels-.jpg', alt: 'Private-label softgels' },
+  { name: 'Sticks', flag: 'Single serve', pick: 'Private-label powder stick packs', dosage: 'Powder', image: '/wp-content/uploads/2025/09/Liposomal-Vitamin-c-Powder-Stick-Pads.jpg', alt: 'Powder stick packs' },
+];
+
+const spreads = [
+  {
+    id: 'capsules',
+    flip: false,
+    kicker: '01 · Strongest line',
+    title: 'Capsules',
+    text: 'The format this factory runs most. Your bottle, your count, your label. Price it as its own SKU.',
+    pick: 'Creatine monohydrate capsules',
+    dosage: 'Capsules',
+    images: [
+      { src: '/wp-content/uploads/2024/03/OEM-Creatine-Monohydrate-Capsules-supplement.png', alt: 'Creatine capsules beside powder' },
+      { src: '/wp-content/uploads/2024/01/Capsule-production-line.jpg', alt: 'Capsule production line' },
+    ],
+  },
+  {
+    id: 'jar',
+    flip: true,
+    kicker: '02 · Listing photo',
+    title: 'Jar powder',
+    text: 'Micronized creatine monohydrate in a tub. The fill weight and your logo are part of the quote.',
+    pick: 'Creatine monohydrate powder, jar',
+    dosage: 'Powder',
+    images: [
+      { src: '/wp-content/uploads/2026/05/Custom-Canned-Creatine.jpg', alt: 'Creatine monohydrate jar' },
+      { src: '/wp-content/uploads/2026/05/Creatine-OEM.png', alt: 'Creatine tub' },
+    ],
+  },
+  {
+    id: 'pouch',
+    flip: false,
+    kicker: '03 · Value pack',
+    title: 'Bagged powder',
+    text: 'The same powder in a stand-up pouch. Quoted separately from the jar.',
+    pick: 'Creatine monohydrate powder, stand-up pouch',
+    dosage: 'Powder',
+    images: [
+      { src: '/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg', alt: 'Creatine stand-up pouch' },
+      { src: '/wp-content/uploads/2024/02/packing-services2-1024x774.jpg', alt: 'Packing line' },
+    ],
+  },
+];
+
+const rest = rail.slice(3);
+
+const faqs = [
+  { q: 'Do you publish a retail margin?', a: 'No. The quote is the factory cost for that pack. Destination price, fees, and advertising sit with the buyer.' },
+  { q: 'What is the MOQ?', a: 'MOQ is flexible. Many finished SKUs start around 500–1,000 units. The number depends on the formula and the pack.' },
+  { q: 'Are you a factory or a trading company?', a: 'Xi’an Sheerherb Biological Technology manufactures the supplements. OEM, ODM, and private label are quoted from Xi’an.' },
+  { q: 'Can the goods be packed for Amazon or Shopify?', a: 'Yes. Pack-out can match Amazon, Shopify, or distributor cartons. Label claims and marketplace compliance stay with the buyer.' },
+  { q: 'Which format should the first order be?', a: 'Creatine monohydrate powder in a jar or a stand-up pouch. Capsules are the strongest format to add. Gummies, softgels, and stick packs can follow the same brief.' },
+  { q: 'Are the supplements FDA approved?', a: 'No. Sheerherb is FDA-registered and works under GMP, HACCP, and ISO 9001. FDA approval is not claimed.' },
+];
+---
+
+<LandingLayout
+  variant="look"
+  title="Most Profitable Products to Sell Online | Creatine OEM | Sheerherb"
+  description="A lookbook of private-label creatine packs: capsules, jar powder, pouch, gummies, softgels, and stick packs. Each format is quoted on its own."
+  englishPath="/landing/high-margin-seller-direct-ads/"
+  image="/wp-content/uploads/2026/05/Creatine-OEM.png"
+  whatsappText="Hello Sheerherb, I want a private label creatine quote for Amazon or Shopify."
+>
+  <div class="look">
+    <p class="look-ticker">Six packs · one factory · choose the look, then the volume</p>
+    <header class="look-top">
+      <div class="wrap">
+        <span class="look-brand">
+          <img src="/brand/logo.png" alt="Sheerherb" width="160" height="56" />
+          <span class="look-name">Sheerherb</span>
+        </span>
+        <span class="look-actions">
+          <a class="look-ghost" href="#looks">The looks</a>
+          <a class="btn" href="#inquiry-form">Quote</a>
+        </span>
+      </div>
+    </header>
+
+    <section class="look-hero">
+      <div class="wrap">
+        <div>
+          <p class="kicker">Private label collection</p>
+          <h1>Pick the pack. We quote that SKU.</h1>
+          <p>Capsules are the strongest line. Jar and pouch are the creatine powder packs. Gummies, softgels, and stick packs sit in the same collection.</p>
+          <p class="look-note">The quote is factory cost. Retail price stays with your brand.</p>
+        </div>
+        <div id="inquiry-form" class="look-form">
+          <p class="kicker">This look</p>
+          <h2>Request the pack</h2>
+          <QuoteForm product="Creatine monohydrate jar or pouch" formId="landing-margin" submitLabel="Request a SKU quote" />
+        </div>
+      </div>
+    </section>
+
+    <div id="looks" class="look-rail">
+      <div class="wrap">
+        {rail.map((item) => (
+          <a href="#inquiry-form" data-pick={item.pick} data-dosage={item.dosage}>
+            <img src={item.image} alt={item.alt} width="320" height="240" />
+            <span>{item.flag}</span>
+            <strong>{item.name}</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        {spreads.map((block) => (
+          <article id={block.id} class:list={['look-spread', block.flip && 'flip']}>
+            <div class="look-mosaic">
+              {block.images.map((image) => <img src={image.src} alt={image.alt} width="720" height="720" />)}
+            </div>
+            <div class="look-copy">
+              <p class="kicker">{block.kicker}</p>
+              <h2>{block.title}</h2>
+              <p>{block.text}</p>
+              <a class="btn" href="#inquiry-form" data-pick={block.pick} data-dosage={block.dosage}>Price this look</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="fx-band">
+      <div class="wrap">
+        <p class="kicker">Also in the collection</p>
+        <h2>Gummies, softgels, sticks</h2>
+        <div class="look-row">
+          {rest.map((item) => (
+            <a href="#inquiry-form" data-pick={item.pick} data-dosage={item.dosage}>
+              <img src={item.image} alt={item.alt} width="480" height="480" />
+              <span>{item.flag}</span>
+              <h3>{item.name}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="look-faq">
+      <div class="wrap land-narrow">
+        <p class="kicker">Questions</p>
+        <h2>Before the quote</h2>
+        {faqs.map((item) => (
+          <div>
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</LandingLayout>

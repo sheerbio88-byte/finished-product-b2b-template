@@ -1,0 +1,141 @@
+---
+import { aboutLinksFor, dosageLinksFor, site, techLinksFor } from '~/lib/site';
+import { LOCALES, localizePath } from '~/i18n/locales';
+import { getMessages } from '~/i18n/messages';
+
+interface Props {
+  lang?: string;
+  englishPath?: string;
+}
+const { lang = 'en', englishPath = '/' } = Astro.props;
+const t = getMessages(lang);
+const locale = LOCALES.find((item) => item.code === lang) || LOCALES[0];
+const home = localizePath('/', lang);
+const quote = localizePath('/get-a-quote/', lang);
+const switchBase = englishPath === '/404/' ? '/' : englishPath;
+
+function hrefOf(path: string) {
+  return localizePath(path, lang);
+}
+---
+
+<div class="topbar">
+  <div class="wrap">
+    <span>{site.legalName}</span>
+    <span>
+      <a href={localizePath('/get-a-quote/', lang)}>{t.quote}</a>
+    </span>
+  </div>
+</div>
+<header class="header">
+  <div class="wrap bar">
+    <input class="nav-toggle" id={`nav-${lang}`} type="checkbox" />
+    <a class="logo" href={home} aria-label="Sheerherb">
+      <img src="/brand/logo.png" alt="Sheerherb" width="220" height="78" />
+    </a>
+    <nav class="nav" aria-label="Primary">
+        <a href={home} aria-current={englishPath === '/' ? 'page' : undefined}>{t.home}</a>
+        <details class="sub">
+          <summary>{t.dosage}</summary>
+          <div class="sub-panel">
+            {dosageLinksFor(t).map((link) => <a href={hrefOf(link.href)}>{link.label}</a>)}
+          </div>
+        </details>
+        <a href={hrefOf('/private-label-supplements/')}>{t.privateLabel}</a>
+        <a href={hrefOf('/products/')}>{t.products}</a>
+        <details class="sub">
+          <summary>{t.technology}</summary>
+          <div class="sub-panel">
+            {techLinksFor(t).map((link) => <a href={hrefOf(link.href)}>{link.label}</a>)}
+          </div>
+        </details>
+        <details class="sub">
+          <summary>{t.about}</summary>
+          <div class="sub-panel">
+            {aboutLinksFor(t).map((link) => <a href={hrefOf(link.href)}>{link.label}</a>)}
+          </div>
+        </details>
+        <a href={hrefOf('/contact-sheerherb/')}>{t.contact}</a>
+        <a class="nav-cta" href={quote}>{t.quote}</a>
+    </nav>
+    <div class="bar-tools">
+      <details class="lang">
+        <summary aria-label={`${t.language}: ${locale.label}`}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M3 12h18M12 3c2.6 2.7 3.9 5.8 3.9 9s-1.3 6.3-3.9 9c-2.6-2.7-3.9-5.8-3.9-9s1.3-6.3 3.9-9z"/></svg>
+          <span class="lang-code">{locale.code.toUpperCase()}</span>
+          <span class="lang-name">{locale.label}</span>
+        </summary>
+        <div class="lang-panel">
+          {
+            LOCALES.map((item) => (
+              <a href={localizePath(switchBase, item.code)} lang={item.htmlLang} aria-current={item.code === lang ? 'true' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </details>
+      <label class="menu-summary" for={`nav-${lang}`} aria-label={t.menu}>
+        <svg class="icon-open" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+      </label>
+    </div>
+  </div>
+</header>
+<script>
+  const finePointer = window.matchMedia('(hover: hover) and (min-width: 980px)');
+  for (const item of document.querySelectorAll('.nav .sub, .lang')) {
+    item.addEventListener('mouseenter', () => {
+      if (finePointer.matches) item.setAttribute('open', '');
+    });
+    item.addEventListener('mouseleave', () => {
+      if (finePointer.matches) item.removeAttribute('open');
+    });
+    item.querySelector('summary')?.addEventListener('click', (event) => {
+      if (finePointer.matches) event.preventDefault();
+    });
+  }
+  const navToggle = document.querySelector('.nav-toggle');
+  const mobileNav = window.matchMedia('(max-width: 979px)');
+  let lockedScroll = 0;
+  const lockPage = () => {
+    const lock = Boolean(navToggle?.checked && mobileNav.matches);
+    const root = document.documentElement;
+    if (lock) {
+      if (root.classList.contains('nav-open')) return;
+      lockedScroll = window.scrollY || root.scrollTop || 0;
+      root.classList.add('nav-open');
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${lockedScroll}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+      return;
+    }
+    if (!root.classList.contains('nav-open')) return;
+    root.classList.remove('nav-open');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    const previous = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    window.scrollTo(0, lockedScroll);
+    root.style.scrollBehavior = previous;
+  };
+  const allowScroll = (event) => {
+    const target = event.target;
+    return target instanceof Element && Boolean(target.closest('.nav, .lang-panel'));
+  };
+  document.addEventListener('touchmove', (event) => {
+    if (!document.documentElement.classList.contains('nav-open') || allowScroll(event)) return;
+    event.preventDefault();
+  }, { passive: false });
+  document.addEventListener('wheel', (event) => {
+    if (!document.documentElement.classList.contains('nav-open') || allowScroll(event)) return;
+    event.preventDefault();
+  }, { passive: false });
+  navToggle?.addEventListener('change', lockPage);
+  mobileNav.addEventListener('change', lockPage);
+</script>

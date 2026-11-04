@@ -1,0 +1,173 @@
+---
+import LandingLayout from '~/layouts/LandingLayout.astro';
+import QuoteForm from '~/components/QuoteForm.astro';
+
+const kits = [
+  {
+    id: 'jar-kit',
+    kicker: 'Kit 01',
+    title: 'The jar kit',
+    note: 'Creatine monohydrate powder',
+    text: 'A tub for the listing photo. Your logo, your fill weight, quoted as the first SKU.',
+    pick: 'Creatine monohydrate jar for Amazon or Shopify',
+    dosage: 'Powder',
+    images: [
+      { src: '/wp-content/uploads/2026/05/Custom-Canned-Creatine.jpg', alt: 'Private-label creatine monohydrate jar' },
+      { src: '/wp-content/uploads/2026/05/Creatine-OEM.png', alt: 'Creatine monohydrate tub' },
+    ],
+  },
+  {
+    id: 'pouch-kit',
+    kicker: 'Kit 02',
+    title: 'The pouch kit',
+    note: 'Same powder, stand-up bag',
+    text: 'A lighter pack for the value listing. Fill weight is part of this quote, not the jar quote.',
+    pick: 'Creatine monohydrate pouch for Amazon or Shopify',
+    dosage: 'Powder',
+    images: [
+      { src: '/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg', alt: 'Private-label creatine stand-up pouch' },
+      { src: '/wp-content/uploads/2024/02/packing-services2-1024x774.jpg', alt: 'Supplement packing' },
+    ],
+  },
+];
+
+const adds = [
+  { name: 'Capsules', flag: 'Strongest line', pick: 'Creatine monohydrate capsules', dosage: 'Capsules', image: '/wp-content/uploads/2024/03/OEM-Creatine-Monohydrate-Capsules-supplement.png', alt: 'Creatine capsules' },
+  { name: 'Gummies', flag: 'Next SKU', pick: 'Creatine monohydrate gummies', dosage: 'Gummies', image: '/wp-content/uploads/2025/03/Creatine-Monohydrate-Gummy.jpg', alt: 'Creatine gummies' },
+  { name: 'Softgels', flag: 'Soft capsule', pick: 'Private-label softgels', dosage: 'Softgels', image: '/wp-content/uploads/2024/09/Private-Label-Astaxanthin-Softgels-.jpg', alt: 'Private-label softgels' },
+  { name: 'Stick packs', flag: 'Single serve', pick: 'Private-label powder stick packs', dosage: 'Powder', image: '/wp-content/uploads/2025/09/Liposomal-Vitamin-c-Powder-Stick-Pads.jpg', alt: 'Powder stick packs' },
+];
+
+const faqs = [
+  { q: 'Do you promise a retail margin?', a: 'No. The quote is the factory cost for that jar, pouch, capsule, gummy, softgel, or stick pack. Destination price, fees, and advertising sit with the buyer.' },
+  { q: 'Which SKU should the first order be?', a: 'Creatine monohydrate powder in a jar or a stand-up pouch. Capsules are the strongest format to add next. Gummies, softgels, and stick packs can follow the same brief.' },
+  { q: 'What is the MOQ?', a: 'MOQ is flexible. Many finished SKUs start around 500–1,000 units, depending on formula and pack.' },
+  { q: 'Can the pack suit Amazon or Shopify?', a: 'Yes. Pack-out can be prepared for Amazon, Shopify, and distributor cartons. You remain the brand of record for the listing.' },
+  { q: 'Are these products FDA approved?', a: 'No. Sheerherb is FDA-registered and works under GMP, HACCP, and ISO 9001. FDA approval is not claimed.' },
+];
+---
+
+<LandingLayout
+  variant="kit"
+  title="Most Profitable Products to Sell | Creatine Private Label | Sheerherb"
+  description="Two first kits: creatine monohydrate in a jar and in a pouch. Capsules, gummies, softgels, and stick packs can be added. Factory cost is quoted per kit."
+  englishPath="/landing/most-profitable-products-direct-ads/"
+  image="/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg"
+  whatsappText="Hello Sheerherb, I want private label creatine for Amazon or Shopify."
+>
+  <div class="kit">
+    <p class="kit-ticker">Jar kit + pouch kit · capsules are the strongest add-on · one factory</p>
+    <header class="kit-top">
+      <div class="wrap">
+        <span class="kit-brand">
+          <img src="/brand/logo.png" alt="Sheerherb" width="160" height="56" />
+          <span class="kit-name">Sheerherb</span>
+        </span>
+        <span class="kit-actions">
+          <a class="kit-ghost" href="#kits">The two kits</a>
+          <a class="btn" href="#inquiry-form">Quote</a>
+        </span>
+      </div>
+    </header>
+
+    <section class="kit-hero">
+      <div class="wrap">
+        <div>
+          <p class="kicker">Amazon · Shopify · one factory</p>
+          <h1>Two kits. Your brand on both.</h1>
+          <p>Start with creatine monohydrate in a jar and a stand-up pouch. You do not need two suppliers for the powder and the pack.</p>
+          <ul class="kit-checks">
+            <li>Jar for the listing photo</li>
+            <li>Pouch for the value pack</li>
+            <li>Capsules when you add the next SKU</li>
+          </ul>
+          <div class="kit-mini">
+            <div><strong>Jar</strong><span>First photo SKU</span></div>
+            <div><strong>Pouch</strong><span>Same powder</span></div>
+            <div><strong>Capsules</strong><span>Strongest line</span></div>
+            <div><strong>Quoted</strong><span>Factory cost only</span></div>
+          </div>
+        </div>
+        <div id="inquiry-form" class="kit-form">
+          <p class="kicker">Free quote</p>
+          <h2>Tell us which kit</h2>
+          <p class="kit-note">Jar, pouch, or both. Retail margin is not part of this quote.</p>
+          <QuoteForm product="Creatine monohydrate jar and pouch" formId="landing-profit" submitLabel="Request a kit quote" />
+        </div>
+      </div>
+    </section>
+
+    <div class="kit-rail">
+      <div class="wrap">
+        <a href="#jar-kit">
+          <img src="/wp-content/uploads/2026/05/Custom-Canned-Creatine.jpg" alt="Creatine jar kit" width="640" height="480" />
+          <span>Kit 01</span>
+          <strong>Jar powder</strong>
+        </a>
+        <a href="#pouch-kit">
+          <img src="/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg" alt="Creatine pouch kit" width="640" height="480" />
+          <span>Kit 02</span>
+          <strong>Bagged powder</strong>
+        </a>
+      </div>
+    </div>
+
+    <section id="kits">
+      <div class="wrap">
+        <p class="kicker">Two kits</p>
+        <h2>Powder, then the pack</h2>
+        {kits.map((kit) => (
+          <article id={kit.id} class="kit-story">
+            <div class="kit-mosaic">
+              {kit.images.map((image) => <img src={image.src} alt={image.alt} width="640" height="640" />)}
+            </div>
+            <div class="kit-side">
+              <p class="kicker">{kit.kicker}</p>
+              <h2>{kit.title}</h2>
+              <p class="kit-note">{kit.note}</p>
+              <p>{kit.text}</p>
+              <a class="btn" href="#inquiry-form" data-pick={kit.pick} data-dosage={kit.dosage}>Price this kit</a>
+            </div>
+          </article>
+        ))}
+        <p class="kicker">Add to the kit</p>
+        <h2>The next format</h2>
+        <div class="kit-adds">
+          {adds.map((item) => (
+            <a href="#inquiry-form" data-pick={item.pick} data-dosage={item.dosage}>
+              <img src={item.image} alt={item.alt} width="360" height="360" />
+              <span>{item.flag}</span>
+              <strong>{item.name}</strong>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="kit-dark">
+      <div class="wrap">
+        <p class="kicker" style="color:#d4b483;">How it works</p>
+        <h2>One form. One kit.</h2>
+        <div class="kit-flow">
+          <article><span>01</span><h3>Name the kit</h3><p>Jar, pouch, or the capsule add-on.</p></article>
+          <article><span>02</span><h3>Quote the SKU</h3><p>Factory cost for that pack. Not a retail margin.</p></article>
+          <article><span>03</span><h3>Approve a sample</h3><p>The sample comes before the packaging run.</p></article>
+          <article><span>04</span><h3>Pack in Xi’an</h3><p>Amazon, Shopify, or distributor cartons.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="kit-faq">
+      <div class="wrap land-narrow">
+        <p class="kicker">Questions</p>
+        <h2>Before you write</h2>
+        {faqs.map((item) => (
+          <div>
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</LandingLayout>

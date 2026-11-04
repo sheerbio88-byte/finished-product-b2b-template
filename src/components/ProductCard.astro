@@ -1,0 +1,22 @@
+---
+import { categoryName, displayTitle } from '~/lib/site';
+import { localizePath } from '~/i18n/locales';
+import type { Entry } from '~/lib/site';
+
+interface Props {
+  product: Entry;
+  lang?: string;
+}
+const { product, lang = 'en' } = Astro.props;
+const category = product.categories?.[0];
+---
+
+<article class="card">
+  <a href={localizePath(product.path, lang)}>
+    <img src={product.image || '/brand/logo.png'} alt={product.title} width="640" height="640" loading="lazy" />
+    <div>
+      {category && <p class="muted">{categoryName(category, lang)}</p>}
+      <h3>{displayTitle(product.title)}</h3>
+    </div>
+  </a>
+</article>

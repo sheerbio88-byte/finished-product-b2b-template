@@ -1,0 +1,18 @@
+# Cloudflare Workers static assets + redirect router.
+# dist/ is gitignored. Workers Builds often runs only `npx wrangler deploy`;
+# package.json "prepare" runs Astro build when WORKERS_CI=1.
+# Do not set pages_build_output_dir (that makes wrangler treat this as Pages).
+# Attach your own Custom Domain in Dashboard → Domains & Routes.
+name = "finished-product-b2b-template"
+compatibility_date = "2026-09-20"
+main = "workers/router.js"
+
+[build]
+command = "npm run build"
+
+[assets]
+run_worker_first = true
+directory = "./dist"
+binding = "ASSETS"
+html_handling = "force-trailing-slash"
+not_found_handling = "404-page"

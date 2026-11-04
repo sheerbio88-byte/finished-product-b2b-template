@@ -1,0 +1,12 @@
+---
+import TermView from '~/components/TermView.astro';
+import { productTags } from '~/lib/site';
+
+export function getStaticPaths() {
+  return productTags.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+---
+
+<TermView entry={entry} />

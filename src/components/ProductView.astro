@@ -1,0 +1,124 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Crumbs from '~/components/Crumbs.astro';
+import ProductCard from '~/components/ProductCard.astro';
+import QuoteForm from '~/components/QuoteForm.astro';
+import {
+  absoluteUrl,
+  breadcrumbSchema,
+  categoryName,
+  metaDescription,
+  organizationSchema,
+  prepareHtml,
+  productSchema as buildProductSchema,
+  relatedProducts,
+  specRows,
+  stripShownSpecTable,
+  displayTitle,
+  stripFirstImage,
+  titleTag,
+  type Entry,
+} from '~/lib/site';
+import { getMessages } from '~/i18n/messages';
+import { localizePath } from '~/i18n/locales';
+
+interface Props {
+  entry: Entry;
+  lang?: string;
+}
+const { entry, lang = 'en' } = Astro.props;
+const t = getMessages(lang);
+const title = titleTag(entry, lang);
+const description = metaDescription(entry);
+const category = entry.categories?.[0];
+const crumbs = [
+  { name: t.products, path: '/products/' },
+  ...(category ? [{ name: categoryName(category, lang), path: `/product-category/${category}/` }] : []),
+  { name: entry.title, path: entry.path },
+];
+const specs = specRows(entry.html || '');
+const body = stripShownSpecTable(stripFirstImage(prepareHtml(entry.html || '', lang), entry.image || ''), specs);
+const related = relatedProducts(entry);
+const productUrl = absoluteUrl(localizePath(entry.path, lang));
+const productSchema = buildProductSchema({
+  name: entry.title,
+  description,
+  image: entry.image,
+  url: productUrl,
+  category: category ? categoryName(category, lang) : t.oemProduct,
+  manufacturerName: "Xi'an Sheerherb Biological Technology Co., Ltd.",
+});
+// GEO (English only): answer-first summary + FAQ from facts already on the site.
+const isEn = lang === 'en';
+const specOf = (re: RegExp) => specs.find((r) => re.test(r.label))?.value;
+const form = specOf(/dosage form/i);
+const shelf = specOf(/shelf/i);
+const storage = specOf(/storage/i);
+const name = displayTitle(entry.title);
+const catLabel = category ? categoryName(category, 'en') : '';
+const geoSummary = [
+  `${name} is a private label / OEM product made by Xi'an Sheerherb Biological Technology Co., Ltd. (Sheerherb) in Xi'an, China${form ? ` in ${form.toLowerCase()} form` : ''}${catLabel ? `, listed under ${catLabel}` : ''}.`,
+  [shelf && `Listed shelf life: ${shelf}.`, 'MOQ on many finished SKUs starts around 500–1,000 units and depends on the ingredient, dosage form, and packaging.'].filter(Boolean).join(' '),
+  'Quotes start from the inquiry form on this page; label claims and destination-market compliance belong to the buyer.',
+];
+const geoFaqs = [
+  { q: `Who manufactures ${name}?`, a: `Xi'an Sheerherb Biological Technology Co., Ltd. (Sheerherb), a private label and OEM supplement manufacturer in Xi'an, Shaanxi, China.` },
+  { q: `What is the MOQ for ${name}?`, a: 'MOQ on many finished SKUs starts around 500–1,000 units. The exact MOQ depends on the ingredient, dosage form, and packaging.' },
+  ...(form ? [{ q: `What dosage form is ${name}?`, a: `Dosage form listed on this page: ${form}.` }] : []),
+  ...(shelf || storage ? [{ q: `What is the shelf life and storage for ${name}?`, a: [shelf && `Shelf life: ${shelf}.`, storage && `Storage: ${storage}.`].filter(Boolean).join(' ') }] : []),
+  { q: `How does private label production work for ${name}?`, a: 'Send the dosage form, target market, quantity, and any label files. The factory confirms formula options, a sample, then production, inspection, packing, and shipping.' },
+];
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: geoFaqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+};
+const schemas = [organizationSchema(), breadcrumbSchema([{ name: t.home, path: '/' }, ...crumbs]), productSchema, ...(isEn ? [faqSchema] : [])];
+---
+
+<Layout title={title} description={description} englishPath={entry.path} lang={lang} image={entry.image} schemas={schemas}>
+  <article class="section">
+    <div class="wrap">
+      <Crumbs items={crumbs} lang={lang} />
+      <div class="product-hero">
+        <img class="product-photo" src={entry.image || '/brand/logo.png'} alt={entry.title} width="900" height="900" />
+        <div>
+          <p class="kicker">{category ? categoryName(category, lang) : t.oemProduct}</p>
+          <h1>{displayTitle(entry.title)}</h1>
+          {isEn && <div class="geo-summary" data-geo="summary">{geoSummary.map((line) => <p>{line}</p>)}</div>}
+          {entry.excerpt && specs.length === 0 && <p class="lede">{entry.excerpt}</p>}
+          {specs.length > 0 && (
+            <div class="specs">
+              {specs.map((row) => <div><strong>{row.label}</strong><span>{row.value}</span></div>)}
+            </div>
+          )}
+          <div class="actions">
+            <a class="btn" href="#quote">{t.quote}</a>
+            <a class="btn-line" href={localizePath('/private-label-supplements/', lang)}>{t.privateLabel}</a>
+          </div>
+          <p class="note">{t.disclaimer}</p>
+        </div>
+      </div>
+      {body && <div class="prose" style="margin-top:1.2rem" set:html={body} />}
+      {isEn && (
+        <section class="geo-faq" style="margin-top:1.5rem">
+          <h2>{name} FAQ</h2>
+          {geoFaqs.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}
+        </section>
+      )}
+      <div class="quote-grid" id="quote" style="margin-top:1.5rem">
+        <div>
+          <h2>{t.quoteTitle}</h2>
+          <p>{t.quoteLede}</p>
+        </div>
+        <QuoteForm lang={lang} product={entry.title} />
+      </div>
+      {related.length > 0 && (
+        <section>
+          <h2>{t.related}</h2>
+          <div class="cards">{related.map((product) => <ProductCard product={product} lang={lang} />)}</div>
+        </section>
+      )}
+    </div>
+  </article>
+</Layout>

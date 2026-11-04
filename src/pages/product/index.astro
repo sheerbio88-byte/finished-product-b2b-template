@@ -1,0 +1,22 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Catalog from '~/components/Catalog.astro';
+import { breadcrumbSchema, organizationSchema } from '~/lib/site';
+import { getMessages } from '~/i18n/messages';
+
+const lang = 'en';
+const t = getMessages(lang);
+const title = 'OEM supplement product archive | Sheerherb';
+const description = t.archiveLede;
+---
+
+<Layout title={title} description={description} englishPath="/product/" lang={lang} schemas={[organizationSchema(), breadcrumbSchema([{ name: t.home, path: '/' }, { name: t.products, path: '/product/' }])]}>
+  <section class="section">
+    <div class="wrap">
+      <p class="kicker">Archive</p>
+      <h1>OEM product archive</h1>
+      <p class="lede">{description}</p>
+      <Catalog lang={lang} />
+    </div>
+  </section>
+</Layout>

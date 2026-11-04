@@ -1,0 +1,15 @@
+---
+import TermView from '~/components/TermView.astro';
+import { productTags } from '~/lib/site';
+import { LOCALE_CODES } from '~/i18n/locales';
+
+export function getStaticPaths() {
+  return LOCALE_CODES.filter((code) => code !== 'en').flatMap((lang) =>
+    productTags.map((entry) => ({ params: { lang, slug: entry.slug }, props: { entry, lang } })),
+  );
+}
+
+const { entry, lang } = Astro.props;
+---
+
+<TermView entry={entry} lang={lang} />

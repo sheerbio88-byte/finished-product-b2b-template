@@ -1,0 +1,17 @@
+---
+import TermView from '~/components/TermView.astro';
+import RedirectView from '~/components/RedirectView.astro';
+import { categoryRoutes } from '~/lib/site';
+import { LOCALE_CODES } from '~/i18n/locales';
+
+export function getStaticPaths() {
+  const routes = categoryRoutes();
+  return LOCALE_CODES.filter((code) => code !== 'en').flatMap((lang) =>
+    routes.map((route) => ({ params: { lang, slug: route.path }, props: { route, lang } })),
+  );
+}
+
+const { route, lang } = Astro.props;
+---
+
+{route.kind === 'redirect' && route.to ? <RedirectView englishFrom={`/product-category/${route.path}/`} englishTo={route.to} lang={lang} /> : <TermView entry={route.entry!} lang={lang} />}

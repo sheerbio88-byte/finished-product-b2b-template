@@ -1,0 +1,16 @@
+---
+import TermView from '~/components/TermView.astro';
+import RedirectView from '~/components/RedirectView.astro';
+import { categoryRoutes } from '~/lib/site';
+
+export function getStaticPaths() {
+  return categoryRoutes().map((route) => ({
+    params: { slug: route.path },
+    props: { route },
+  }));
+}
+
+const { route } = Astro.props;
+---
+
+{route.kind === 'redirect' && route.to ? <RedirectView englishFrom={`/product-category/${route.path}/`} englishTo={route.to} /> : <TermView entry={route.entry!} />}

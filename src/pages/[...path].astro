@@ -1,0 +1,16 @@
+---
+import DocumentView from '~/components/DocumentView.astro';
+import RedirectView from '~/components/RedirectView.astro';
+import { contentRoutes } from '~/lib/site';
+
+export function getStaticPaths() {
+  return contentRoutes().map((route) => ({
+    params: { path: route.path },
+    props: { route },
+  }));
+}
+
+const { route } = Astro.props;
+---
+
+{route.kind === 'redirect' && route.to ? <RedirectView englishFrom={`/${route.path}/`} englishTo={route.to} lang="en" /> : <DocumentView entry={route.entry!} lang="en" />}

@@ -1,0 +1,30 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Catalog from '~/components/Catalog.astro';
+import { breadcrumbSchema, organizationSchema } from '~/lib/site';
+import { LOCALE_CODES } from '~/i18n/locales';
+import { getMessages } from '~/i18n/messages';
+
+export function getStaticPaths() {
+  return LOCALE_CODES.filter((code) => code !== 'en').map((lang) => ({ params: { lang }, props: { lang } }));
+}
+
+const { lang } = Astro.props;
+const t = getMessages(lang);
+const archiveNames: Record<string, string> = {
+  zh: '膳食补充剂 OEM 产品目录',
+  ja: 'OEMサプリメント製品一覧',
+  ko: 'OEM 건강기능식품 제품 목록',
+};
+const archiveName = archiveNames[lang] || t.archiveLede.split(/[。.!\n]/)[0];
+---
+
+<Layout title={`${archiveName} | Sheerherb`} description={t.archiveLede} englishPath="/product/" lang={lang} schemas={[organizationSchema(), breadcrumbSchema([{ name: t.home, path: '/' }, { name: t.products, path: '/product/' }])]}>
+  <section class="section">
+    <div class="wrap">
+      <h1>{archiveName}</h1>
+      <p class="lede">{t.archiveLede}</p>
+      <Catalog lang={lang} />
+    </div>
+  </section>
+</Layout>

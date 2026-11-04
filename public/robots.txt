@@ -1,0 +1,73 @@
+# robots.txt for https://sheerherb-oem.com/
+# AI assistants and search crawlers are explicitly welcome.
+# LLM site guide: https://sheerherb-oem.com/llms.txt
+
+User-agent: *
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Applebot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: CCBot
+Allow: /
+Disallow: /wp-admin/
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /wp-admin/
+
+Sitemap: https://sheerherb-oem.com/sitemap-index.xml

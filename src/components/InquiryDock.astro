@@ -1,0 +1,85 @@
+---
+import QuoteForm from '~/components/QuoteForm.astro';
+import { getMessages } from '~/i18n/messages';
+
+interface Props {
+  lang?: string;
+  showQuote?: boolean;
+}
+const { lang = 'en', showQuote = true } = Astro.props;
+const t = getMessages(lang);
+---
+
+<div class="dock">
+  <button class="dock-btn dock-top" type="button" data-to-top aria-label={t.toTop} title={t.toTop}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M6 14.5 12 8.5l6 6"/></svg>
+  </button>
+  {(
+    <button class="dock-btn dock-quote" type="button" data-open-quote aria-label={t.quote} title={t.quote}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M7 3.5h7.2L19 8.2V20.5H7zM14.2 3.8V8.2H19M9.2 12.2h5.6M9.2 15.8h3.8"/></svg>
+    </button>
+  )}
+</div>
+<dialog
+  class="quote-dialog"
+  id="quote-dialog"
+  aria-labelledby="quote-dialog-title"
+  data-quote-title={t.quote}
+  data-quote-sub={t.waSub}
+  data-wa-title={t.waChat}
+  data-wa-sub={t.waSub}
+>
+  <div class="quote-head">
+    <div>
+      <p class="quote-title" id="quote-dialog-title">{t.quote}</p>
+      <p class="quote-sub" id="quote-dialog-sub">{t.waSub}</p>
+    </div>
+    <button class="quote-x" type="button" data-close-quote aria-label={t.close}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <QuoteForm lang={lang} formId="dock-inquiry" pinSubmit />
+</dialog>
+<script>
+  const dialog = document.getElementById('quote-dialog');
+  const titleEl = document.getElementById('quote-dialog-title');
+  const subEl = document.getElementById('quote-dialog-sub');
+  const openQuote = (fromWa = false) => {
+    if (!dialog) return;
+    if (titleEl) titleEl.textContent = fromWa ? dialog.dataset.waTitle || '' : dialog.dataset.quoteTitle || '';
+    if (subEl) subEl.textContent = fromWa ? dialog.dataset.waSub || '' : dialog.dataset.quoteSub || '';
+    if (dialog.open) return;
+    dialog.showModal();
+    const first = dialog.querySelector('input:not([type="hidden"]):not([tabindex="-1"]), select, textarea');
+    if (first instanceof HTMLElement) first.focus({ preventScroll: true });
+    document.dispatchEvent(new CustomEvent('sheer:quote-open'));
+  };
+  document.addEventListener('click', (event) => {
+    const trigger = event.target instanceof Element ? event.target.closest('[data-open-quote]') : null;
+    if (!trigger || !dialog) return;
+    event.preventDefault();
+    openQuote(false);
+  });
+  document.querySelector('[data-to-top]')?.addEventListener('click', () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
+  document.querySelector('[data-close-quote]')?.addEventListener('click', () => dialog?.close());
+  let downOnBackdrop = false;
+  const outsideDialogBox = (event) => {
+    if (!dialog || event.target !== dialog) return false;
+    const r = dialog.getBoundingClientRect();
+    return event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom;
+  };
+  dialog?.addEventListener('pointerdown', (event) => {
+    downOnBackdrop = outsideDialogBox(event);
+  });
+  dialog?.addEventListener('click', (event) => {
+    if (downOnBackdrop && outsideDialogBox(event)) dialog.close();
+    downOnBackdrop = false;
+  });
+</script>
+<script>
+  import { bindInquiryForms } from '../lib/inquiry-client.mjs';
+  bindInquiryForms();
+</script>

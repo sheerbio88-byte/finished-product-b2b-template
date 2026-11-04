@@ -1,0 +1,20 @@
+---
+import DocumentView from '~/components/DocumentView.astro';
+import RedirectView from '~/components/RedirectView.astro';
+import { contentRoutes } from '~/lib/site';
+import { LOCALE_CODES } from '~/i18n/locales';
+
+export function getStaticPaths() {
+  const routes = contentRoutes();
+  return LOCALE_CODES.filter((code) => code !== 'en').flatMap((lang) =>
+    routes.map((route) => ({
+      params: { lang, path: route.path },
+      props: { route, lang },
+    })),
+  );
+}
+
+const { route, lang } = Astro.props;
+---
+
+{route.kind === 'redirect' && route.to ? <RedirectView englishFrom={`/${route.path}/`} englishTo={route.to} lang={lang} /> : <DocumentView entry={route.entry!} lang={lang} />}

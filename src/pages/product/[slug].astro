@@ -1,0 +1,16 @@
+---
+import ProductView from '~/components/ProductView.astro';
+import RedirectView from '~/components/RedirectView.astro';
+import { productRoutes } from '~/lib/site';
+
+export function getStaticPaths() {
+  return productRoutes().map((route) => ({
+    params: { slug: route.path },
+    props: { route },
+  }));
+}
+
+const { route } = Astro.props;
+---
+
+{route.kind === 'redirect' && route.to ? <RedirectView englishFrom={`/product/${route.path}/`} englishTo={route.to} /> : <ProductView entry={route.entry!} />}

@@ -1,0 +1,32 @@
+---
+import { localizePath } from '~/i18n/locales';
+import { getMessages } from '~/i18n/messages';
+
+interface Crumb {
+  name: string;
+  path: string;
+}
+interface Props {
+  items: Crumb[];
+  lang?: string;
+}
+const { items, lang = 'en' } = Astro.props;
+const t = getMessages(lang);
+---
+
+<nav class="crumbs" aria-label={t.breadcrumb}>
+  <span class="crumb">
+    <a href={localizePath('/', lang)}>{t.home}</a>
+  </span>
+  {
+    items.map((item, index) => (
+      <span class="crumb">
+        {index < items.length - 1 ? (
+          <a href={localizePath(item.path, lang)}>{item.name}</a>
+        ) : (
+          <span aria-current="page">{item.name}</span>
+        )}
+      </span>
+    ))
+  }
+</nav>

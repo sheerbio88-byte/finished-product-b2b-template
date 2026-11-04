@@ -1,0 +1,164 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import ProductCard from '~/components/ProductCard.astro';
+import QuoteForm from '~/components/QuoteForm.astro';
+import {
+  absoluteUrl,
+  categoryName,
+  dosageLinksFor,
+  faqSchema,
+  featuredProducts,
+  organizationSchema,
+  productCategories,
+  site,
+  titleTag,
+} from '~/lib/site';
+import { getMessages } from '~/i18n/messages';
+import { localizePath } from '~/i18n/locales';
+
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const t = getMessages(lang);
+const homeEntry = {
+  path: '/',
+  title: t.heroTitle,
+  seoTitle: t.heroTitle,
+  seoDescription: t.heroLede,
+  kind: 'page',
+};
+const description = t.heroLede;
+const title = `${t.heroTitle} | Sheerherb`;
+const steps = [
+  { title: t.step1Title, text: t.step1Text },
+  { title: t.step2Title, text: t.step2Text },
+  { title: t.step3Title, text: t.step3Text },
+  { title: t.step4Title, text: t.step4Text },
+];
+const faqs = [1, 2, 3, 4, 5, 6].map((n) => ({
+  q: t[`faq${n}q` as 'faq1q'],
+  a: t[`faq${n}a` as 'faq1a'],
+}));
+const schemas = [
+  organizationSchema(),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Sheerherb',
+    url: `${absoluteUrl('/')}`,
+    description,
+    publisher: { '@type': 'Organization', name: site.legalName },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    url: absoluteUrl(localizePath('/', lang)),
+    description,
+    isPartOf: { '@type': 'WebSite', name: 'Sheerherb', url: absoluteUrl('/') },
+  },
+  faqSchema(faqs),
+];
+void homeEntry;
+void titleTag;
+---
+
+<Layout title={title} description={description} englishPath="/" lang={lang} image="/wp-content/uploads/2024/01/Capsule-production-line.jpg" schemas={schemas}>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker">{t.kicker}</p>
+        <h1>{t.heroTitle}</h1>
+        <p class="lede hero-description">{t.heroLede}</p>
+        <div class="actions">
+          <a class="btn" href={localizePath('/get-a-quote/', lang)}>{t.heroPrimary}</a>
+          <a class="btn-line" href={localizePath('/dosage-form-oem/', lang)}>{t.heroSecondary}</a>
+        </div>
+      </div>
+      <img class="hero-photo" src="/wp-content/uploads/2024/01/Capsule-production-line.jpg" alt="Capsule production line at Sheerherb" width="1200" height="900" />
+    </div>
+  </section>
+  <section class="trust-bar">
+    <div class="wrap trust">
+      <div><strong>{t.trustForms}</strong><span class="muted" dir="auto">{t.trustFormsNote}</span></div>
+      <div><strong>{t.trustMoq}</strong><span class="muted" dir="auto">{t.trustMoqNote}</span></div>
+      <div><strong>{t.trustGmp}</strong><span class="muted" dir="auto">{t.trustGmpNote}</span></div>
+      <div><strong>{t.trustExport}</strong><span class="muted" dir="auto">{t.trustExportNote}</span></div>
+    </div>
+  </section>
+  <script is:inline>
+    (function () {
+      var bar = document.querySelector('.trust-bar');
+      if (!bar) return;
+      var mq = window.matchMedia('(max-width: 799px)');
+      var sync = function () {
+        var on = mq.matches;
+        document.documentElement.style.setProperty('--trust-h', on ? bar.offsetHeight + 'px' : '0px');
+        document.body.classList.toggle('has-trust', on);
+      };
+      sync();
+      mq.addEventListener('change', sync);
+      window.addEventListener('resize', sync);
+      if (window.ResizeObserver) new ResizeObserver(sync).observe(bar);
+    })();
+  </script>
+  <section class="section">
+    <div class="wrap">
+      <h2>{t.dosage}</h2>
+      <div class="chip-row">
+        {dosageLinksFor(t).map((link) => (
+          <a class="chip" href={localizePath(link.href, lang)}>{link.label}</a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <h2>{t.hot}</h2>
+      <div class="cards">
+        {featuredProducts(8).map((product) => <ProductCard product={product} lang={lang} />)}
+      </div>
+      <p><a href={localizePath('/products/', lang)}>{t.allProducts}</a></p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <h2>{t.processTitle}</h2>
+      <div class="steps">
+        {steps.map((step) => <article class="step"><h3>{step.title}</h3><p>{step.text}</p></article>)}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <h2>{t.categories}</h2>
+      <div class="grid">
+        {
+          productCategories.slice(0, 6).map((category) => (
+            <a class="panel" href={localizePath(category.path, lang)}>
+              <strong>{categoryName(category.slug, lang)}</strong>
+              {category.count ? <span class="muted"> · {category.count}</span> : null}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap faq">
+      <h2>{t.faqTitle}</h2>
+      {faqs.map((item) => <details><summary>{item.q}</summary><p>{item.a}</p></details>)}
+    </div>
+  </section>
+  <section class="section" id="quote">
+    <div class="wrap quote-grid">
+      <div>
+        <h2>{t.quoteTitle}</h2>
+        <p class="lede">{t.quoteLede}</p>
+        <p class="note">{t.disclaimer}</p>
+      </div>
+      <QuoteForm lang={lang} />
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,49 @@
+---
+import LandingLayout from '~/layouts/LandingLayout.astro';
+
+const pages = [
+  {
+    href: '/landing/supplement-factory-direct-ads/',
+    tag: 'Factory OEM',
+    title: 'Creatine factory direct',
+    text: 'Factory-catalog ads page. Light layout, product grid, and a quote card beside the creatine line.',
+  },
+  {
+    href: '/landing/most-profitable-products-direct-ads/',
+    tag: 'Private label',
+    title: 'Creatine for Amazon and Shopify',
+    text: 'Editorial kit page. Cream page, serif headlines, jar kit and pouch kit.',
+  },
+  {
+    href: '/landing/high-margin-seller-direct-ads/',
+    tag: 'Seller page',
+    title: 'High-margin seller page',
+    text: 'Lookbook page. Thumbnail rail and large format spreads for the six packs.',
+  },
+];
+---
+
+<LandingLayout
+  title="Landing pages | Sheerherb"
+  description="Noindex landing pages for Sheerherb supplement OEM ads."
+  englishPath="/landing/"
+>
+  <section class="land-block">
+    <div class="wrap land-narrow">
+      <p class="kicker">Ads</p>
+      <h1>Landing pages</h1>
+      <p class="lede">These pages are noindex. Inquiries use the same factory inbox as the rest of the site.</p>
+      <div class="land-list">
+        {pages.map((page) => (
+          <article class="panel">
+            <a href={page.href}>
+              <p class="kicker">{page.tag}</p>
+              <h2>{page.title}</h2>
+              <p>{page.text}</p>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</LandingLayout>

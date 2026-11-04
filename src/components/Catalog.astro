@@ -1,0 +1,51 @@
+---
+import ProductCard from '~/components/ProductCard.astro';
+import { categoryName, productCategories, products } from '~/lib/site';
+import { localizePath } from '~/i18n/locales';
+import { getMessages } from '~/i18n/messages';
+import type { Entry } from '~/lib/site';
+
+interface Props {
+  items?: Entry[];
+  lang?: string;
+  showFilters?: boolean;
+}
+const { items = products, lang = 'en', showFilters = true } = Astro.props;
+const t = getMessages(lang);
+---
+
+{
+  showFilters && (
+    <div class="filters" data-filters>
+      <button class="on" type="button" data-filter="all">{t.allProducts}</button>
+      {productCategories.map((category) => (
+        <button type="button" data-filter={category.slug}>{categoryName(category.slug, lang)}</button>
+      ))}
+    </div>
+  )
+}
+<div class="cards" data-catalog>
+  {
+    items.map((product) => (
+      <div data-cats={(product.categories || []).join(' ')}>
+        <ProductCard product={product} lang={lang} />
+      </div>
+    ))
+  }
+</div>
+<p><a href={localizePath('/product-category/weight-management-supplements/', lang)}>{t.categories}</a></p>
+<script>
+  const bar = document.querySelector('[data-filters]');
+  const cards = document.querySelectorAll('[data-catalog] [data-cats]');
+  bar?.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    const filter = target.dataset.filter;
+    if (!filter) return;
+    bar.querySelectorAll('button').forEach((button) => button.classList.remove('on'));
+    target.classList.add('on');
+    cards.forEach((card) => {
+      const cats = card.getAttribute('data-cats') || '';
+      (card as HTMLElement).hidden = filter !== 'all' && !cats.split(' ').includes(filter);
+    });
+  });
+</script>

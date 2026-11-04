@@ -1,0 +1,24 @@
+---
+import QuoteForm from '~/components/QuoteForm.astro';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  product: string;
+  formId: string;
+  submitLabel: string;
+}
+
+const { title, subtitle, product, formId, submitLabel } = Astro.props;
+---
+
+<section id="inquiry-form" class="land-block land-band">
+  <div class="wrap">
+    <div class="land-inquiry-inner">
+      <p class="kicker">Inquiry</p>
+      <h2>{title}</h2>
+      <p class="lede">{subtitle}</p>
+      <QuoteForm product={product} formId={formId} submitLabel={submitLabel} />
+    </div>
+  </div>
+</section>

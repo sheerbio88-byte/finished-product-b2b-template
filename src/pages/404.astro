@@ -1,0 +1,21 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import { dosageLinks } from '~/lib/site';
+---
+
+<Layout title="Page not found | Sheerherb" description="The page is not on this site. Browse dosage forms, products, or request a quote." englishPath="/404/" noindex={true}>
+  <section class="section">
+    <div class="wrap">
+      <p class="kicker">404</p>
+      <h1>This page is not on the new site</h1>
+      <p class="lede">Try a dosage form, the product catalog, or send the SKU you need.</p>
+      <div class="actions">
+        <a class="btn" href="/get-a-quote/">Get a quote</a>
+        <a class="btn-line" href="/products/">Products</a>
+      </div>
+      <div class="grid">
+        {dosageLinks.map((link) => <a class="panel" href={link.href}>{link.label}</a>)}
+      </div>
+    </div>
+  </section>
+</Layout>

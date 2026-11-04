@@ -1,0 +1,114 @@
+---
+import { SOURCE_SITE, TURNSTILE_SITE_KEY } from '~/config/inquiry.mjs';
+import { getMessages } from '~/i18n/messages';
+
+interface Props {
+  lang?: string;
+  product?: string;
+  formId?: string;
+  pinSubmit?: boolean;
+  submitLabel?: string;
+}
+const { lang = 'en', product = '', formId = 'page-inquiry', pinSubmit = false, submitLabel = '' } = Astro.props;
+const t = getMessages(lang);
+const forms = [
+  { value: 'Gummies', label: t.navGummies },
+  { value: 'Capsules', label: t.navCapsules },
+  { value: 'Softgels', label: t.navSoftgels },
+  { value: 'Tablets', label: t.navTablets },
+  { value: 'Powder', label: t.navPowders },
+  { value: 'Liposomal', label: t.navLiposomal },
+  { value: 'Drops', label: t.optDrops },
+  { value: 'Lozenges', label: t.navLozenges },
+  { value: 'Other', label: t.optOther },
+];
+const intents = ['Sample order', 'Wholesale catalog', 'Custom OEM'];
+const volumes = ['Sample only', 'Under 25 kg', '25-100 kg', '100-500 kg', '500 kg+'];
+const copy = {
+  required: t.formRequired,
+  emailInvalid: t.formEmailInvalid,
+  messageRequired: t.formMessageRequired,
+  humanRequired: t.formHumanRequired,
+  humanLoad: t.formHumanLoad,
+  humanExpired: t.formHumanExpired,
+  humanMissing: t.formHumanMissing,
+  sending: t.formSending,
+  success: t.formSuccess,
+  fail: t.formFail,
+};
+---
+
+<form
+  id={`${formId}-form`}
+  class:list={['form', 'inquiry-form', pinSubmit && 'is-dock']}
+  method="post"
+  novalidate
+  data-inquiry-form
+  data-source-site={SOURCE_SITE}
+  data-turnstile-sitekey={TURNSTILE_SITE_KEY}
+  data-copy={JSON.stringify(copy)}
+>
+  <div class:list={[pinSubmit && 'quote-scroll']}>
+    <label>
+      {t.formName}
+      <input name="name" required autocomplete="name" />
+      <span class="error-message" hidden></span>
+    </label>
+    <label>
+      {t.formEmail}
+      <input name="email" type="email" required autocomplete="email" inputmode="email" />
+      <span class="error-message" hidden></span>
+    </label>
+    <label>
+      <span class="field-label">Phone / WhatsApp <span class="opt">(optional)</span></span>
+      <input name="phone" type="tel" autocomplete="tel" inputmode="tel" />
+      <span class="error-message" hidden></span>
+    </label>
+    <label>
+      Product
+      <input name="product" required autocomplete="off" list={`${formId}-products`} value={product} placeholder="e.g. Creatine gummies" />
+      <datalist id={`${formId}-products`}>
+        {forms.map((form) => <option value={form.value}>{form.label}</option>)}
+      </datalist>
+      <span class="error-message" hidden></span>
+    </label>
+    <label>
+      <span class="field-label">{t.formCompany} <span class="opt">(optional)</span></span>
+      <input name="company" autocomplete="organization" />
+      <span class="error-message" hidden></span>
+    </label>
+    <label>
+      <span class="field-label">Looking for <span class="opt">(optional)</span></span>
+      <select name="channel">
+        <option value="">Select</option>
+        {intents.map((v) => <option value={v}>{v}</option>)}
+      </select>
+      <span class="error-message" hidden></span>
+    </label>
+    <label>
+      <span class="field-label">Volume <span class="opt">(optional)</span></span>
+      <select name="volume">
+        <option value="">Select</option>
+        {volumes.map((v) => <option value={v}>{v}</option>)}
+      </select>
+      <span class="error-message" hidden></span>
+    </label>
+    <label>
+      <span class="field-label">{t.formMessage} <span class="opt">(optional)</span></span>
+      <textarea name="message"></textarea>
+      <span class="error-message" hidden></span>
+    </label>
+    <p class="checkline">{t.formDisclaimer}</p>
+    <div class="hp" aria-hidden="true">
+      <label>Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+    <div data-turnstile-wrap>
+      <div class="cf-turnstile" data-turnstile-widget></div>
+      <p class="error-message" data-turnstile-error hidden></p>
+    </div>
+  </div>
+  <div class:list={[pinSubmit && 'quote-actions']}>
+    <button class="btn" type="submit">{submitLabel || t.formSubmit}</button>
+    <p class="form-message" role="status" hidden></p>
+  </div>
+</form>

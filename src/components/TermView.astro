@@ -1,0 +1,37 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Crumbs from '~/components/Crumbs.astro';
+import Catalog from '~/components/Catalog.astro';
+import QuoteForm from '~/components/QuoteForm.astro';
+import { breadcrumbSchema, metaDescription, organizationSchema, prepareHtml, productsInCategory, productsWithTag, titleTag, type Entry } from '~/lib/site';
+import { categoryLabel } from '~/i18n/ui';
+import { getMessages } from '~/i18n/messages';
+
+interface Props {
+  entry: Entry;
+  lang?: string;
+}
+const { entry, lang = 'en' } = Astro.props;
+const t = getMessages(lang);
+const items = entry.kind === 'product_tag' ? productsWithTag(entry.slug) : productsInCategory(entry.slug);
+const heading = categoryLabel(entry.slug, lang, entry.title);
+const title = titleTag({ ...entry, seoTitle: entry.seoTitle || `${heading} OEM` }, lang);
+const description = metaDescription(entry);
+const html = prepareHtml(entry.html || '', lang);
+---
+
+<Layout title={title} description={description} englishPath={entry.path} lang={lang} schemas={[organizationSchema(), breadcrumbSchema([{ name: t.home, path: '/' }, { name: heading, path: entry.path }])]}>
+  <section class="section">
+    <div class="wrap">
+      <Crumbs items={[{ name: heading, path: entry.path }]} lang={lang} />
+      <p class="kicker">{t.categories}</p>
+      <h1>{heading}</h1>
+      {html && <div class="prose" set:html={html} />}
+      <Catalog items={items} lang={lang} showFilters={false} />
+      <div class="quote-grid">
+        <p class="note">{t.disclaimer}</p>
+        <QuoteForm lang={lang} product={entry.title} />
+      </div>
+    </div>
+  </section>
+</Layout>

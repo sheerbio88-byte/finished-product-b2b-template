@@ -1,0 +1,41 @@
+---
+import { aboutLinksFor, dosageLinksFor, site, socialLinks, whatsappHref } from '~/lib/site';
+import { localizePath } from '~/i18n/locales';
+import { getMessages } from '~/i18n/messages';
+
+interface Props {
+  lang?: string;
+}
+const { lang = 'en' } = Astro.props;
+const t = getMessages(lang);
+const year = 2026;
+---
+
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div>
+      <img class="logo-pad" src="/brand/logo.png" alt="" width="180" height="64" />
+      <p>{t.footerBlurb}</p>
+      <p>
+        {site.address}<br />
+        <button class="linkish" type="button" data-open-quote>{t.quote}</button>
+      </p>
+    </div>
+    <div>
+      <h2>{t.dosage}</h2>
+      {dosageLinksFor(t).slice(0, 6).map((link) => <div><a href={localizePath(link.href, lang)}>{link.label}</a></div>)}
+    </div>
+    <div>
+      <h2>{t.about}</h2>
+      {aboutLinksFor(t).map((link) => <div><a href={localizePath(link.href, lang)}>{link.label}</a></div>)}
+      <div><a href={localizePath('/about-us/legal/', lang)}>{t.terms}</a></div>
+      <div><a href={localizePath('/about-us/privacy-policy/', lang)}>{t.privacy}</a></div>
+      <div><a href={localizePath('/site-map/', lang)}>{t.sitemap}</a></div>
+    </div>
+    <div>
+      <h2>{t.contact}</h2>
+      {socialLinks.map((link) => <div><a href={link.href} rel="noopener noreferrer">{link.label}</a></div>)}
+      <p>© {year} {site.legalName}. {t.rights}</p>
+    </div>
+  </div>
+</footer>

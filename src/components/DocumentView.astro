@@ -1,0 +1,171 @@
+---
+import Layout from '~/layouts/Layout.astro';
+import Crumbs from '~/components/Crumbs.astro';
+import QuoteForm from '~/components/QuoteForm.astro';
+import Catalog from '~/components/Catalog.astro';
+import ProductCard from '~/components/ProductCard.astro';
+import {
+  breadcrumbSchema,
+  featuredProducts,
+  metaDescription,
+  organizationSchema,
+  displayTitle,
+  pages,
+  postCategories,
+  site,
+  whatsappHref,
+  posts,
+  prepareHtml,
+  categoryName,
+  productCategories,
+  productTags,
+  products,
+  titleTag,
+  type Entry,
+} from '~/lib/site';
+import { categoryLabel } from '~/i18n/ui';
+import { getMessages } from '~/i18n/messages';
+import { localizePath } from '~/i18n/locales';
+
+interface Props {
+  entry: Entry;
+  lang?: string;
+}
+const { entry, lang = 'en' } = Astro.props;
+const t = getMessages(lang);
+const title = titleTag(entry, lang);
+const description = entry.path === '/' ? t.heroLede : metaDescription(entry);
+const html = prepareHtml(entry.html || '', lang);
+const about = pages.find((page) => page.path === '/about-us/');
+const certImages = [...(about?.html || '').matchAll(/<img[^>]+src="([^"]+)"[^>]*alt="([^"]*)"/g)]
+  .map((match) => ({ src: match[1], alt: match[2] || 'Certificate' }))
+  .filter((image) => /iso|haccp|halal|gmp|kosher|organic|fda|vegan/i.test(`${image.src} ${image.alt}`));
+const crumbs = [{ name: entry.title, path: entry.path }];
+const schemas = [
+  organizationSchema(),
+  breadcrumbSchema([{ name: t.home, path: '/' }, { name: entry.title, path: entry.path }]),
+];
+if (entry.kind === 'post') {
+  schemas.push({
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: entry.title,
+    datePublished: entry.date,
+    dateModified: entry.modified || entry.date,
+    author: { '@type': 'Organization', name: 'Sheerherb' },
+    publisher: organizationSchema(),
+    image: entry.image ? [entry.image] : undefined,
+  });
+}
+const mode =
+  entry.path === '/get-a-quote/' || entry.path === '/inquiry/'
+    ? 'quote'
+    : entry.path === '/products/'
+      ? 'products'
+      : entry.path === '/hot-products/'
+        ? 'hot'
+        : entry.path === '/site-map/'
+          ? 'map'
+          : entry.path === '/about-us/blog/'
+            ? 'blog'
+            : entry.path === '/tags-cloud/'
+              ? 'tags'
+              : entry.kind === 'category'
+                ? 'news'
+                : 'doc';
+---
+
+<Layout title={title} description={description} englishPath={entry.path} lang={lang} image={entry.image} noindex={entry.noindex} schemas={schemas}>
+  <article class="section">
+    <div class="wrap">
+      <Crumbs items={crumbs} lang={lang} />
+      <p class="kicker">{entry.kind === 'post' ? t.blog : t.oemKicker}</p>
+      <h1>{displayTitle(entry.title)}</h1>
+      {entry.date && entry.kind === 'post' && <p class="muted">{t.updated} {entry.modified || entry.date}</p>}
+      {mode === 'quote' && (
+        <div class="quote-grid">
+          <p class="lede">{t.quoteLede}</p>
+          <QuoteForm lang={lang} />
+        </div>
+      )}
+      {mode === 'products' && (
+        <>
+          <p class="lede">{t.catalogLede}</p>
+          <Catalog lang={lang} />
+        </>
+      )}
+      {mode === 'hot' && (
+        <>
+          <p class="lede">{t.hot}</p>
+          <div class="cards">{featuredProducts(12).map((product) => <ProductCard product={product} lang={lang} />)}</div>
+        </>
+      )}
+      {mode === 'blog' && (
+        <div class="grid">
+          {posts.map((post) => (
+            <a class="panel" href={localizePath(post.path, lang)}>
+              <strong>{post.title}</strong>
+              <span class="muted"> {post.date}</span>
+            </a>
+          ))}
+        </div>
+      )}
+      {mode === 'news' && (
+        <div class="grid">
+          {posts.filter((post) => entry.slug === 'news' || post.categories?.includes(entry.slug)).map((post) => (
+            <a class="panel" href={localizePath(post.path, lang)}><strong>{post.title}</strong></a>
+          ))}
+        </div>
+      )}
+      {mode === 'tags' && (
+        <div class="filters">
+          {productTags.map((tag) => <a href={localizePath(tag.path, lang)}>{tag.title}</a>)}
+        </div>
+      )}
+      {mode === 'map' && (
+        <div class="split">
+          <div>
+            <h2>{t.products}</h2>
+            {products.map((product) => <div><a href={localizePath(product.path, lang)}>{product.title}</a></div>)}
+          </div>
+          <div>
+            <h2>{t.categories}</h2>
+            {productCategories.map((category) => <div><a href={localizePath(category.path, lang)}>{categoryName(category.slug, lang)}</a></div>)}
+            <h2>{t.pages}</h2>
+            {pages.filter((page) => page.path !== '/').map((page) => <div><a href={localizePath(page.path, lang)}>{page.title}</a></div>)}
+            {postCategories.map((category) => <div><a href={localizePath(category.path, lang)}>{categoryLabel(category.slug, lang, category.title)}</a></div>)}
+          </div>
+        </div>
+      )}
+      {entry.path === '/contact-sheerherb/' && (
+        <div class="contact-layout">
+          <div class="panel">
+            <h2>{t.contact}</h2>
+            <p><strong>{t.salesRole}</strong></p>
+            <p><button class="btn" type="button" data-open-quote>{t.quote}</button></p>
+            <p>{t.address}: {site.address}</p>
+            <p class="muted">{t.hours}</p>
+          </div>
+          <figure class="contact-photo">
+            <img src="/wp-content/uploads/2025/03/AILISA.jpg" alt="Sheerherb sales contact" width="1080" height="1016" />
+          </figure>
+        </div>
+      )}
+      {mode === 'doc' && entry.path !== '/contact-sheerherb/' && html && <div class="prose" set:html={html} />}
+      {entry.path === '/about-us/certificates/' && certImages.length > 0 && (
+        <div class="cards cert-grid">
+          {certImages.map((image) => <img src={image.src} alt={image.alt} />)}
+        </div>
+      )}
+      {mode !== 'quote' && (
+        <div class="quote-grid" style="margin-top:1.5rem">
+          <div>
+            <h2>{t.quoteTitle}</h2>
+            <p class="note">{t.disclaimer}</p>
+          </div>
+          <QuoteForm lang={lang} product={entry.kind === 'post' ? entry.title : ''} />
+        </div>
+      )}
+    </div>
+  </article>
+</Layout>

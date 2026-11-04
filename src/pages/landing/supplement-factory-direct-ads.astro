@@ -1,0 +1,226 @@
+---
+import LandingLayout from '~/layouts/LandingLayout.astro';
+import QuoteForm from '~/components/QuoteForm.astro';
+
+const trust = ['Factory in Xi’an', 'Capsules strongest', 'Jar and pouch', 'GMP', 'FDA-registered', 'Sample first'];
+
+const strengths = [
+  { t: 'Factory production', d: 'OEM, ODM, and private label are made in Xi’an.' },
+  { t: 'Jar powder', d: 'Micronized creatine monohydrate in a tub with your logo.' },
+  { t: 'Bagged powder', d: 'The same powder in a stand-up pouch, quoted as its own pack.' },
+  { t: 'Capsule line', d: 'Capsules are the format this factory runs most.' },
+  { t: 'More packs', d: 'Gummies, softgels, and stick packs follow the same brief.' },
+  { t: 'Sample first', d: 'The sample is approved before the packaging run.' },
+  { t: 'Channel pack-out', d: 'Amazon, Shopify, or distributor cartons.' },
+  { t: 'Documents', d: 'GMP, HACCP, and ISO 9001. FDA approval is not claimed.' },
+];
+
+const products = [
+  { name: 'Jar powder', text: 'Creatine monohydrate tub. Fill weight is part of the quote.', pick: 'Creatine monohydrate powder, jar', dosage: 'Powder', image: '/wp-content/uploads/2026/05/Custom-Canned-Creatine.jpg', alt: 'Private-label creatine monohydrate powder in a jar' },
+  { name: 'Bagged powder', text: 'Stand-up pouch of the same powder.', pick: 'Creatine monohydrate powder, stand-up pouch', dosage: 'Powder', image: '/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg', alt: 'Private-label creatine monohydrate powder in a stand-up pouch' },
+  { name: 'Capsules', text: 'Strongest line. Bottle, count, and label.', pick: 'Creatine monohydrate capsules', dosage: 'Capsules', image: '/wp-content/uploads/2024/03/OEM-Creatine-Monohydrate-Capsules-supplement.png', alt: 'Creatine capsules beside creatine powder' },
+  { name: 'Gummies', text: 'Creatine gummies after the powder sample.', pick: 'Creatine monohydrate gummies', dosage: 'Gummies', image: '/wp-content/uploads/2025/03/Creatine-Monohydrate-Gummy.jpg', alt: 'Creatine monohydrate gummies' },
+  { name: 'Softgels', text: 'A softgel when the formula should not be a two-piece capsule.', pick: 'Private-label softgels', dosage: 'Softgels', image: '/wp-content/uploads/2024/09/Private-Label-Astaxanthin-Softgels-.jpg', alt: 'Private-label softgels' },
+  { name: 'Stick packs', text: 'Single-serve sticks for travel and samples.', pick: 'Private-label powder stick packs', dosage: 'Powder', image: '/wp-content/uploads/2025/09/Liposomal-Vitamin-c-Powder-Stick-Pads.jpg', alt: 'Single-serve powder stick packs' },
+];
+
+const steps = [
+  { n: '01', t: 'Inquiry', d: 'Name the pack, the market, and the volume.' },
+  { n: '02', t: 'Quote', d: 'Fill weight, count, and pack are priced together.' },
+  { n: '03', t: 'Sample', d: 'Approve the sample before the run.' },
+  { n: '04', t: 'Production', d: 'Manufacture and quality control in Xi’an.' },
+  { n: '05', t: 'Ship', d: 'Pack-out for the channel you named.' },
+];
+
+const faqs = [
+  { q: 'Can one powder be both a jar and a pouch?', a: 'Yes. Micronized creatine monohydrate can be private-labeled in a tub and in a stand-up pouch. Each pack is quoted on its own.' },
+  { q: 'Which format is the strongest fit?', a: 'Capsules. Bottle, count, and label are the brief we run most often. Jar powder and bagged powder are the creatine packs to price first.' },
+  { q: 'Do you private-label gummies, softgels, and stick packs?', a: 'Yes. Gummies, softgels, and single-serve stick packs are made to your specification. Say which one in the form and we price that SKU.' },
+  { q: 'What is the MOQ?', a: 'MOQ is flexible. Many finished SKUs start around 500–1,000 units. The number for a jar, pouch, or capsule depends on the formula and the pack.' },
+  { q: 'Are the supplements FDA approved?', a: 'No. Sheerherb is FDA-registered and works under GMP, HACCP, and ISO 9001. Halal, Kosher, Organic, and ISO 22000 are available on qualifying SKUs. Label claims in the destination market stay with the buyer.' },
+];
+---
+
+<LandingLayout
+  variant="factory"
+  title="Creatine Monohydrate OEM | Jar and Pouch Private Label | Sheerherb"
+  description="Factory-direct creatine monohydrate in a jar or pouch, plus capsules, gummies, softgels, and stick packs. Quoted from Xi’an."
+  englishPath="/landing/supplement-factory-direct-ads/"
+  image="/wp-content/uploads/2026/05/Creatine-OEM.png"
+  whatsappText="Hello Sheerherb, I need a private label creatine quote for a jar or pouch."
+>
+  <div class="fx">
+    <header class="fx-top">
+      <div class="wrap">
+        <span class="logo"><img src="/brand/logo.png" alt="Sheerherb" width="220" height="78" /></span>
+        <a class="btn" href="#inquiry-form"><span class="fx-long">Get a factory quote</span><span class="fx-short">Quote</span></a>
+      </div>
+    </header>
+    <div class="fx-trust">
+      <ul class="wrap">
+        {trust.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+
+    <section class="fx-hero">
+      <div class="wrap">
+        <div>
+          <p class="kicker">Customized creatine</p>
+          <h1>Jar, pouch, and the capsule line</h1>
+          <p>Micronized creatine monohydrate under your brand. Capsules are the strongest format to add. The quote is the factory cost for the pack you name.</p>
+          <ul class="fx-points">
+            <li>Factory in Xi’an, not a trading desk</li>
+            <li>Your logo, your fill weight, your carton</li>
+            <li>Gummies, softgels, and stick packs on the same brief</li>
+          </ul>
+          <a class="btn" href="#inquiry-form" data-pick="Creatine monohydrate powder, jar or pouch" data-dosage="Powder">Price this pack</a>
+        </div>
+        <div class="fx-collage">
+          <figure class="fx-main">
+            <img src="/wp-content/uploads/2026/05/Creatine-OEM.png" alt="Private-label creatine monohydrate jar" width="900" height="700" />
+          </figure>
+          <div class="fx-pair">
+            <img src="/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg" alt="Creatine monohydrate stand-up pouch" width="480" height="480" />
+            <img src="/wp-content/uploads/2024/03/OEM-Creatine-Monohydrate-Capsules-supplement.png" alt="Creatine capsules" width="480" height="480" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fx-band">
+      <div class="wrap">
+        <h2>Factory strengths</h2>
+        <div class="fx-strengths">
+          {strengths.map((item) => (
+            <article>
+              <h3>{item.t}</h3>
+              <p>{item.d}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section id="inquiry-form" class="fx-quote">
+      <div class="wrap">
+        <div>
+          <p class="kicker">Factory quote</p>
+          <h2>Price one SKU</h2>
+          <p>Tell us the pack and the volume. A quote is not an order. Retail price stays with your brand.</p>
+          <ul class="fx-chips">
+            <li>Sample before the run</li>
+            <li>Private label</li>
+            <li>Amazon or Shopify pack-out</li>
+            <li>Quoted per SKU</li>
+          </ul>
+        </div>
+        <div class="fx-card">
+          <p class="kicker">This pack</p>
+          <h3>Creatine monohydrate</h3>
+          <QuoteForm product="Creatine monohydrate jar or pouch" formId="landing-factory" submitLabel="Request creatine pricing" />
+        </div>
+      </div>
+    </section>
+
+    <section class="fx-band">
+      <div class="wrap">
+        <p class="kicker">The line</p>
+        <h2>Six packs to price</h2>
+        <div class="fx-products">
+          {products.map((item) => (
+            <article>
+              <img src={item.image} alt={item.alt} width="640" height="640" />
+              <h3>{item.name}</h3>
+              <p>{item.text}</p>
+              <a class="btn" href="#inquiry-form" data-pick={item.pick} data-dosage={item.dosage}>Price this pack</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <article class="fx-feature">
+          <img src="/wp-content/uploads/2026/05/Custom-Canned-Creatine.jpg" alt="Creatine monohydrate jar with room for a brand logo" width="900" height="700" />
+          <div>
+            <p class="kicker">First SKU</p>
+            <h2>Jar powder for the listing photo</h2>
+            <ul>
+              <li>Micronized creatine monohydrate</li>
+              <li>Your logo on the tub</li>
+              <li>Fill weight is part of the quote</li>
+            </ul>
+            <a class="btn" href="#inquiry-form" data-pick="Creatine monohydrate powder, jar" data-dosage="Powder">Request this jar</a>
+          </div>
+        </article>
+        <article class="fx-feature flip">
+          <img src="/wp-content/uploads/2024/03/OEM-Creatine-Monohydrate-Capsules-supplement.png" alt="Creatine capsule line" width="900" height="700" />
+          <div>
+            <p class="kicker">Strongest line</p>
+            <h2>Capsules when the powder SKU is set</h2>
+            <ul>
+              <li>The format we run most</li>
+              <li>Your bottle and your count</li>
+              <li>Quoted as its own SKU</li>
+            </ul>
+            <a class="btn" href="#inquiry-form" data-pick="Creatine monohydrate capsules" data-dosage="Capsules">Request capsules</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="fx-band">
+      <div class="wrap fx-floor">
+        <img class="wide" src="/wp-content/uploads/2024/01/Capsule-production-line.jpg" alt="Capsule production line at Sheerherb" width="1200" height="700" />
+        <div>
+          <p class="kicker">Xi’an</p>
+          <h2>Made on the capsule line</h2>
+          <p>Production, quality control, and pack-out stay with the factory. The buyer keeps the listing and the claims.</p>
+        </div>
+        <div class="fx-thumbs">
+          <img src="/wp-content/uploads/2024/01/Factory-production-1024x551.jpg" alt="Sheerherb production floor" width="400" height="400" />
+          <img src="/wp-content/uploads/2024/02/packing-services2-1024x774.jpg" alt="Supplement packing at Sheerherb" width="400" height="400" />
+          <img src="/wp-content/uploads/2026/05/Custom-Bagged-Creatine-1024x1024.jpg" alt="Bagged creatine monohydrate" width="400" height="400" />
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>From the form to shipment</h2>
+        <div class="fx-steps">
+          {steps.map((step) => (
+            <article>
+              <span>{step.n}</span>
+              <h3>{step.t}</h3>
+              <p>{step.d}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="fx-strip">
+      <ul class="wrap">
+        <li>Sample first</li>
+        <li>Private label</li>
+        <li>Quality control</li>
+        <li>Channel pack-out</li>
+        <li>Reorder the same pack</li>
+      </ul>
+    </section>
+
+    <section class="fx-faq">
+      <div class="wrap land-narrow">
+        <h2>Factory questions</h2>
+        {faqs.map((item) => (
+          <div>
+            <h3>{item.q}</h3>
+            <p>{item.a}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</LandingLayout>
